@@ -1,6 +1,15 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.JPanel;
+
 public class GUI extends JFrame implements ActionListener
 {
     // setting up ALL the variables
@@ -11,8 +20,13 @@ public class GUI extends JFrame implements ActionListener
     mnuGameTitle = new JMenuItem("GUI GAME "),
     mnuExit = new JMenuItem("    Quit");
 
-    JButton btnEmpty[] = new JButton[10];
-
+//    Image stickLad = ImageIO.read(getClass().getResource("/resources/StickLAd.png"));
+ //   JButton lad = new JButton(new ImageIcon(stickLad));
+//   lad.setBounds(100,100,0,0);
+    //window.add(lad);
+   // window.setSize(500,500);
+   // window.setLayout(null);
+    //window.setVisible(true);
     JPanel  pnlNewGame = new JPanel(),
     pnlNorth = new JPanel(),
     pnlSouth = new JPanel(),
@@ -79,22 +93,23 @@ public class GUI extends JFrame implements ActionListener
         // setting up the playing field
         pnlPlayingField.setLayout(new GridLayout(3, 3, 2, 2));
         pnlPlayingField.setBackground(Color.black);
-        for(int x=1; x <= 9; ++x)   
-        {
-            btnEmpty[x] = new JButton();
-            btnEmpty[x].setBackground(new Color(220, 220, 220));
-            btnEmpty[x].addActionListener(this);
-            pnlPlayingField.add(btnEmpty[x]);
-            btnEmpty[x].setEnabled(setTableEnabled);
-        }
-
         // adding everything needed to pnlNorth and pnlSouth
         pnlNorth.add(mnuMain);
-
+        
         // adding to window and Showing window
         window.add(pnlNorth, BorderLayout.NORTH);
         window.add(pnlSouth, BorderLayout.CENTER);
         window.setVisible(true);
+        
+
+            try{
+                BufferedImage image = ImageIO.read(new File("C:\\Users\\fhsplab\\Desktop\\GuiGame\\src\\resources"));
+                JLabel picLabel = new JLabel(new ImageIcon(image));
+                add(picLabel);
+            }
+            catch(IOException e){
+                e.printStackTrace();
+            }
 }
 public void actionPerformed(ActionEvent click)  
     {
@@ -150,12 +165,6 @@ private class RadioListener implements ActionListener
               
 
         remainingMoves = 1;
-
-        for(int x=1; x <= 9; ++x)   
-        {
-            btnEmpty[x].setText("");
-            btnEmpty[x].setEnabled(setTableEnabled);
-        }
 
         win = false;        
     }
