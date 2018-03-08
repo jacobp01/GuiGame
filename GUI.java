@@ -101,11 +101,12 @@ public class GUI extends JFrame implements ActionListener
         window.add(pnlSouth, BorderLayout.CENTER);
         window.setVisible(true);
         
-
-            try{
-                BufferedImage image = ImageIO.read(new File("C:\\Users\\fhsplab\\Desktop\\GuiGame\\src\\resources"));
-                JLabel picLabel = new JLabel(new ImageIcon(image));
-                add(picLabel);
+       
+        
+        try{
+           BufferedImage image = ImageIO.read(new File("C:\\Users\\fhsplab\\Desktop\\GuiGame\\src\\resources"));
+               JLabel picLabel = new JLabel(new ImageIcon(image));
+              add(picLabel);
             }
             catch(IOException e){
                 e.printStackTrace();
@@ -161,12 +162,7 @@ private class RadioListener implements ActionListener
         }
     }// End RadioListener
     private void RedrawGameBoard()  
-    {
-              
-
-        remainingMoves = 1;
-
-        win = false;        
+    {       
     }
 }
 
