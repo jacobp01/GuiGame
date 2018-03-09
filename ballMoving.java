@@ -12,7 +12,11 @@ import javax.imageio.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 public class ballMoving extends Canvas {
- // starting pos
+ // Plans:
+ // Put in a side panel with items, just make another panel that's thin
+ // make things happen when you press interact key when lad is in specific position
+    
+    // starting pos
     int myX = 400;
     int myY = 400;
     Image background;
