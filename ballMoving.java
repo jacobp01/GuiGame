@@ -17,13 +17,19 @@ public class ballMoving extends Canvas {
  // Plans:
  // Put in a side panel with items, just make another panel that's thin
  // make things happen when you press interact key when lad is in specific position
-    
     // starting pos
     int myX = 0;
     int myY = 0;
+    int gromboX = 300;
+    int gromboY = 300;
     int inventory = 0;
+    boolean inGrombo = false; 
     Image background;
-    Image lad;  
+    Image lad;
+    Image grombo;
+    Image inside1;
+    Image key;
+    Image gameOver;
     ArrayList<String> inventoryString = new ArrayList<String>();
 
     public ballMoving() {
@@ -37,7 +43,62 @@ public class ballMoving extends Canvas {
     }
  
     public void paint(Graphics g) {
-
+        // have game over screen print if grombo catches you
+        // game over if grombo comes within 30 units of player
+        if(inGrombo == true){
+        try {
+                inside1 = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/inside1.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Graphics ag = inside1.getGraphics();
+            g.drawImage(inside1,0,0,this);
+             try {
+                grombo = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/grombo.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Graphics mg = grombo.getGraphics();
+            if(gromboX < myX){
+                gromboX += 20;
+            }
+            else{
+                gromboX -= 20;
+            }
+            if(gromboY < myY){
+                gromboY += 20;
+            }
+            else{
+                gromboY -= 20;
+            }
+            
+            g.drawImage(grombo,gromboX,gromboY,this);
+             try {
+                lad = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/lad.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+              Graphics zg = lad.getGraphics();
+              g.drawImage(lad,myX,myY,this);
+             try {
+                key = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/key.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Graphics tg = key.getGraphics();
+            g.drawImage(key,350,350,this);
+            if((Math.abs(myX - gromboX) < 20) && (Math.abs(myY - gromboY) < 20)){
+                System.out.println("You have been caught by Grombo. He will stew you for his brunch. Yum.");
+                try {
+                gameOver = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/gameOver.png"));
+             } catch (IOException e) {
+                e.printStackTrace();
+              }
+              Graphics lg = gameOver.getGraphics();
+              g.drawImage(gameOver,0,0,this);
+            }
+        }
+            else{
           if(background == null){
             try {
                 background = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/desert.png"));
@@ -58,6 +119,7 @@ public class ballMoving extends Canvas {
         g.drawImage(lad,myX,myY,this);
         // g.fillOval(myX, myY, 30, 30);
     }
+}
     public void moveIt(KeyEvent evt) {
      switch (evt.getKeyCode()) {
             case KeyEvent.VK_S:
@@ -83,18 +145,29 @@ public class ballMoving extends Canvas {
         repaint();
     }
     public void Interact(){
-       if(myX == 0 && myY == 0){
+       if((myX == 0 && myY == 0) && (inventory == 0)){
            System.out.println("Your Trusty Sword lies at your feet. You pick it up.");
            inventoryString.add("Trusty Sword");
            inventory++;
         }
        else if(myX == 150 && myY == 150){
            System.out.println("THE TEMPLE OF GROMBO THE FIFTH, ENTER IF YOU DARE");
-           //Grombo(evt);
+           System.out.println("If you wish to continue, grab the key and avoid Grombo. If he catches you,it is game over!");
+           inGrombo = true;
+           repaint();
         }
        else{
        System.out.println("Nothing to interact with here"); 
     }
+    }
+    public void drawLair(Graphics g){
+        if(inGrombo == true){
+            try {
+                background = ImageIO.read(new File("C:/Users/fhsplab/Desktop/GuiGame/src/resources/desert.png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
     public void Inventory(){
         
@@ -108,17 +181,7 @@ public class ballMoving extends Canvas {
             }
         }
     }
-    public void Grombo(KeyEvent evt){
-        System.out.println("Do you wish to enter Grombo's lair: Y/N");
-        switch (evt.getKeyCode()) {
-            case KeyEvent.VK_Y:
-                System.out.println("WORK IN PROGRESS");
-                break;
-            case KeyEvent.VK_N:
-                System.out.println("You leave the entrance to Grombo's lair, relief coursing through you.");
-                break;
-        }
-    }
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame("Basic Game");
                 System.out.println("Use WASD To Move and E to interact");
