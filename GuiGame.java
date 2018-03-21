@@ -13,7 +13,7 @@ import javax.imageio.*;
 import java.io.*;
 import javax.imageio.ImageIO;
 import java.awt.List;
-public class ballMoving extends Canvas {
+public class GuiGame extends Canvas {
  // Plans:
  // Put in a side panel with items, just make another panel that's thin
  // make things happen when you press interact key when lad is in specific position
@@ -36,6 +36,8 @@ public class ballMoving extends Canvas {
     Image hermit;
     Image riddleScreen;
     Image riddleAns1;
+    Image templeicon;
+    Image templeInside;
     ArrayList<String> inventoryString = new ArrayList<String>();
     boolean gameOver1 = false;
     boolean gromboDone = false;
@@ -44,8 +46,9 @@ public class ballMoving extends Canvas {
     boolean inOverworld = true;
     boolean solved;
     boolean inRiddle = false;
-    
-    public ballMoving() {
+    boolean swordPickUp = false;
+    boolean inTemple = false;
+    public GuiGame() {
         setSize(new Dimension(500, 500));
         addKeyListener(new KeyAdapter() {
             @Override
@@ -56,6 +59,19 @@ public class ballMoving extends Canvas {
     }
     public void paint(Graphics g) {
         if(gameOver1 == false){
+            
+        if(inTemple == true){
+            try{
+                templeInside = ImageIO.read(new File("src/resources/templeInside.png"));
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            Graphics wg = templeInside.getGraphics();
+            g.drawImage(templeInside,0,0,this);
+            
+        }
+            
         // have game over screen print if grombo catches you
         // game over if grombo comes within 50 units of player
         if(inGrombo == true){
@@ -137,7 +153,7 @@ public class ballMoving extends Canvas {
        }
         if(inRiddle == true){
             try{
-                riddleScreen = ImageIO.read(new File("src/resources/blackB.png"));
+                riddleScreen = ImageIO.read(new File("src/resources/fountain2.png"));
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -145,14 +161,13 @@ public class ballMoving extends Canvas {
             Graphics ig = riddleScreen.getGraphics();
             g.drawImage(riddleScreen,0,0,this);
             
-             try{
-                riddleAns1= ImageIO.read(new File("src/resources/riddle1.png"));
-            }
-            catch (IOException e) {
+             try {
+                lad = ImageIO.read(new File("src/resources/lad.png"));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            Graphics qg = riddleAns1.getGraphics();
-            g.drawImage(riddleAns1, 100, 100, this);
+              Graphics bg = lad.getGraphics();
+              g.drawImage(lad,myX,myY,this);
         }
         if(inOverworld == true){
           if(background == null){
@@ -164,7 +179,7 @@ public class ballMoving extends Canvas {
         }
         Graphics og = background.getGraphics();
         g.drawImage(background,0,0,this);
-                if(inventory == 0){
+                if(swordPickUp == false){
         try {
                 sword = ImageIO.read(new File("src/resources/sword.png"));
             } catch (IOException e) {
@@ -183,6 +198,14 @@ public class ballMoving extends Canvas {
             }
         Graphics pg = oasisicon.getGraphics();
         g.drawImage(oasisicon, 400, 350, this);
+        try{
+            templeicon = ImageIO.read(new File("src/resources/templeicon.png"));
+        }
+        catch (IOException e) {
+                e.printStackTrace();
+            }
+        Graphics vg = templeicon.getGraphics();
+        g.drawImage(templeicon, 400, 0, this);
         if( lad == null){
             try {
                 lad = ImageIO.read(new File("src/resources/lad.png"));
@@ -230,11 +253,24 @@ else{
            System.out.println("Your Trusty Sword lies at your feet. You pick it up.");
            inventoryString.add("Trusty Sword");
            inventory++;
+           swordPickUp = true;
            return;
          }
-         
+       if(inOverworld == true){
+           if(myX == 400 && myY == 0){
+               int templeCount = inventoryString.size();
+              if(templeCount == 3){
+                  System.out.println("Testing");
+                  inTemple = true;
+                }
+              else{
+                  System.out.println("The legendary Shrine of Law'Shra'Ku'Nabburak. Enter only with the sacred items:");
+                  System.out.println("A key from a monster, a trusted weapon, and the orb of a wise man");
+                }
+            }
+        }
        if(gromboDone == false && inOverworld == true){
-        if(myX == 150 && myY == 150){
+        if(myX == 150 && myY == 250){
            System.out.println("THE TEMPLE OF GROMBO THE FIFTH, ENTER IF YOU DARE");
            System.out.println("If you wish to continue, grab the key and avoid Grombo. If he catches you,it is game over!");
            inGrombo = true;
@@ -246,9 +282,6 @@ else{
         else{
              if((myX == 150 && myY == 150) && (inOverworld == true)){
             System.out.println("You've already defeated Grombo. You have no need to enter his lair again.");
-        }
-               else{
-           System.out.println("Nothing to interact with here"); 
         }
        }
     
@@ -262,6 +295,18 @@ else{
             return;
         }
        }
+       if(inRiddle == true){
+           if(myX == 0 && ((myY == 250) || (myY == 200))){
+               System.out.println("Chombino gasps. 'No one has ever solved my great riddle!");
+               solved = true;
+               inRiddle = false;
+               inBini = true;
+               repaint();
+            }
+           else{
+               System.out.println("Fool! Try Again!");
+            }
+        }
        if(biniDone == true && inOverworld == true){
          if(myX == 400 && myY == 350){
             System.out.println("You've already solved Chombino's riddles. The oasis is vacant.");
@@ -270,17 +315,20 @@ else{
   
        if(inBini == true){
         if(myX == 0 && myY == 0){
+        if(solved == false){
         System.out.println("Chombino speaks");
         System.out.println("Chombino: Foolish lad. For entering my oasis you must solve my riddle");
         inRiddle = true;
         inBini = false;
         repaint();
         System.out.println("You find yourself in a dark room suddenly, answers to riddles gleaming on the floor");
-        
+        System.out.println("If I have two horses, and I eat one of them, how many horses do I have????");
+       }
         if(solved == true){
             System.out.println("Impossible! You solved my riddle!");
             System.out.println("Take this: It's the mystical Orb of Bingo");
             inventoryString.add("Orb of Bingo");
+            inventory++;
             System.out.println("Good luck in your quest");
             inBini = false;
             inOverworld = true;
@@ -291,15 +339,13 @@ else{
             System.out.println("In a flash, Chombino vanishes from the oasis.");
             System.out.println("You exit, clutching the orb of bingo.");
         }
-        else{
-            System.out.println("Wrong! I knew you were a fool. Try again lad!");
-        }
     }
     }
        if(inGrombo == true){
            if(myX == 350 && myY == 350){
            System.out.println("You pick up the key!");
            inventoryString.add("Key");
+           inventory++;
            inGrombo = false;
            inOverworld = true; 
            gromboDone = true;
@@ -332,7 +378,7 @@ else{
                 System.out.println("Press I to open your Inventory!");
                 System.out.println("");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        ballMoving ex = new ballMoving();
+        GuiGame ex = new GuiGame();
         frame.getContentPane().add(ex);
         frame.pack();
         frame.setResizable(false);
