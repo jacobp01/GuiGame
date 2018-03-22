@@ -257,7 +257,7 @@ else{
            return;
          }
        if(inOverworld == true){
-           if(myX == 400 && myY == 50){
+           if(myX == 400 && myY == 50){ 
                int templeCount = inventoryString.size();
               if(templeCount == 3){
                   System.out.println();
