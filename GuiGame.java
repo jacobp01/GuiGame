@@ -205,7 +205,7 @@ public class GuiGame extends Canvas {
                 e.printStackTrace();
             }
         Graphics vg = templeicon.getGraphics();
-        g.drawImage(templeicon, 400, 0, this);
+        g.drawImage(templeicon, 400, 50, this);
         if( lad == null){
             try {
                 lad = ImageIO.read(new File("src/resources/lad.png"));
@@ -257,11 +257,15 @@ else{
            return;
          }
        if(inOverworld == true){
-           if(myX == 400 && myY == 0){
+           if(myX == 400 && myY == 50){
                int templeCount = inventoryString.size();
               if(templeCount == 3){
-                  System.out.println("Testing");
+                  System.out.println();
+                  System.out.println("You've done it! You've collected all three items!");
+                  System.out.println("Your reward: Eternal Life! Light springs from the shrine and you feel unstoppable!");
+                  System.out.println("Thank you for playing our game!");
                   inTemple = true;
+                  inOverworld = false;
                 }
               else{
                   System.out.println("The legendary Shrine of Law'Shra'Ku'Nabburak. Enter only with the sacred items:");
@@ -298,6 +302,7 @@ else{
        if(inRiddle == true){
            if(myX == 0 && ((myY == 250) || (myY == 200))){
                System.out.println("Chombino gasps. 'No one has ever solved my great riddle!");
+               System.out.println("Talk to Chombino to obtain the orb!");
                solved = true;
                inRiddle = false;
                inBini = true;
@@ -374,6 +379,8 @@ else{
     
     public static void main(String[] args) {
         JFrame frame = new JFrame("Adventure! Knightman Quest Land XXV");
+                System.out.println("Welcome to Knightman Quest Land XXV");
+                System.out.println("Created by Jacob Pawlak and Nick Chang");
                 System.out.println("Use WASD To Move and E to interact");
                 System.out.println("Press I to open your Inventory!");
                 System.out.println("");
